@@ -1,6 +1,8 @@
 package com.jaax.pokeapidex;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -20,11 +22,20 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
     private Retrofit retrofit;
     private static final String TAG = "POKEDEX";
+    private RecyclerView recyclerView;
+    private ListaPokemonAdapter pokemonAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        recyclerView = findViewById(R.id.recyclerView);
+        pokemonAdapter = new ListaPokemonAdapter();
+        recyclerView.setAdapter(pokemonAdapter);
+        recyclerView.setHasFixedSize(true);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
+        recyclerView.setLayoutManager(layoutManager);
 
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://www.pokeapi.co/api/v2/")
@@ -46,10 +57,7 @@ public class MainActivity extends AppCompatActivity {
                     PokemonRespuesta respuesta = response.body();
                     ArrayList<Pokemon> listaPokemon = respuesta.getResults();
 
-                    for(int i=0; i<listaPokemon.size(); i++){
-                        Pokemon p = listaPokemon.get(i);
-                        Log.i(TAG, "Pokemon: " + p.getName());
-                    }
+                    pokemonAdapter.addListaPokemon(listaPokemon);
                 } else {
                     Log.e(TAG, " onResponse: "+response.errorBody());
                 }
