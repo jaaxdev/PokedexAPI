@@ -5,4 +5,9 @@
         android:angle="270"
         android:endColor="#91DA71"
         android:startColor="#5DC784"/>
+    <stroke
+        android:dashGap="20px"
+        android:dashWidth="10px"
+        android:width="3dp"
+        android:color="#FFFFFF"/>
 </shape>
