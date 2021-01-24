@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">PokeAPIdex</string>
+    <string name="pokeimg">pokeImg</string>
 </resources>

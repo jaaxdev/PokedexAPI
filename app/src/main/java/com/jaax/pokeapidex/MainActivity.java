@@ -4,15 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
 import android.util.Log;
-
 import com.jaax.pokeapidex.models.Pokemon;
 import com.jaax.pokeapidex.models.PokemonRespuesta;
 import com.jaax.pokeapidex.pokeapi.PokeapiService;
+import com.jaax.pokedexjava.R;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -22,28 +21,31 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
     private Retrofit retrofit;
-    private static final String TAG = "POKEDEX";
+    private PokemonAdapter pokemonAdapter;
     private RecyclerView recyclerView;
-    private ListaPokemonAdapter pokemonAdapter;
-    private int offset;
+    private static final String TAG = "POKEDEX";
     private boolean chargeable;
+    private int offset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         recyclerView = findViewById(R.id.recyclerView);
-        pokemonAdapter = new ListaPokemonAdapter(this);
-        recyclerView.setAdapter(pokemonAdapter);
-        recyclerView.setHasFixedSize(true);
-        final GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
-        recyclerView.setLayoutManager(layoutManager);
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        final GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
+        pokemonAdapter = new PokemonAdapter( );
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager( layoutManager );
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
+            super.onScrolled(recyclerView, dx, dy);
 
                 if(dy > 0){
                     int visibleItemCount = layoutManager.getChildCount();
@@ -54,13 +56,14 @@ public class MainActivity extends AppCompatActivity {
                         if((visibleItemCount + pastVisibleItems) >= itemTotalCount){
                             Log.i(TAG, " Final");
                             chargeable = false;
-                            offset += 20;
+                            offset += 15;
                             obtenerDatos(offset);
                         }
                     }
                 }
             }
         });
+        recyclerView.setAdapter(pokemonAdapter);
 
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://www.pokeapi.co/api/v2/")
@@ -73,16 +76,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void obtenerDatos(int offset){
         PokeapiService service = retrofit.create(PokeapiService.class);
-        Call<PokemonRespuesta> respuestaCall = service.obtenerListaPokemon(20, offset);
+        Call<PokemonRespuesta> respuestaCall = service.obtenerListaPokemon(15, offset);
 
         respuestaCall.enqueue(new Callback<PokemonRespuesta>() {
             @Override
-            public void onResponse(Call<PokemonRespuesta> call, Response<PokemonRespuesta> response) {
+            public void onResponse(@NonNull Call<PokemonRespuesta> call, @NonNull Response<PokemonRespuesta> response) {
                 chargeable = true;
-                if(response.isSuccessful()){
+                if( response.isSuccessful() ){
                     PokemonRespuesta respuesta = response.body();
-                    ArrayList<Pokemon> listaPokemon = respuesta.getResults();
-
+                    List<Pokemon> listaPokemon = respuesta.getResults();
+                    Log.i(TAG, listaPokemon.get(0).getUrl());
                     pokemonAdapter.addListaPokemon(listaPokemon);
                 } else {
                     Log.e(TAG, " onResponse: "+response.errorBody());
@@ -90,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<PokemonRespuesta> call, Throwable t) {
+            public void onFailure(@NonNull Call<PokemonRespuesta> call, @NonNull Throwable t) {
                 chargeable = true;
                 Log.e(TAG, "onFailure: " + t.getMessage());
             }

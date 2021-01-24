@@ -1,31 +1,23 @@
 package com.jaax.pokeapidex.models;
 
 public class Pokemon {
-    private int number;
-    private String name, url;
+    private final String name;
+    private final String imageURL;
 
-    public int getNumber() {
-        String[] urlPartes = url.split("/");
-        return Integer.parseInt(urlPartes[urlPartes.length - 1]);
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    public Pokemon(String name, String imageURL){
         this.name = name;
+        this.imageURL = imageURL;
+    }
+
+    public String getNumber() {
+        String[] arrayNumImg = imageURL.split("/");
+        return arrayNumImg[ arrayNumImg.length - 1 ];
     }
 
     public String getUrl() {
-        return url;
+        return this.imageURL;
     }
-
-    public void setUrl(String url) {
-        this.url = url;
+    public String getName() {
+        return name;
     }
 }

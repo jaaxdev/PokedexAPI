@@ -1,2 +1,2 @@
-rootProject.name='PokeAPIdex'
+rootProject.name='PokedexJava'
 include ':app'
