@@ -18,10 +18,8 @@ import java.util.List;
 public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHolder> {
 
     private final List<Pokemon> listaPokemon;
-    private final Context context;
-    public PokemonAdapter(Context context){
+    public PokemonAdapter(){
         listaPokemon = new ArrayList<Pokemon>(0);
-        this.context = context;
     }
 
     @NonNull
@@ -37,7 +35,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
         holder.nombreTxtView.setText(poke.getName());
         holder.numberTextView.setText("#"+poke.getNumber());
 
-        Glide.with(this.context)
+        Glide.with(holder.itemView.getContext())
                 .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+poke.getNumber()+".png")
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)

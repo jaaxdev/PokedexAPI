@@ -3,7 +3,6 @@ package com.jaax.pokeapidex;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,7 +10,7 @@ import com.jaax.pokeapidex.models.Pokemon;
 import com.jaax.pokeapidex.models.PokemonRespuesta;
 import com.jaax.pokeapidex.pokeapi.PokeapiService;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         final GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
-        pokemonAdapter = new PokemonAdapter( this );
+        pokemonAdapter = new PokemonAdapter( );
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager( layoutManager );
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -47,20 +46,20 @@ public class MainActivity extends AppCompatActivity {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
 
-            if(dy > 0){
-                int visibleItemCount = layoutManager.getChildCount();
-                int itemTotalCount = layoutManager.getItemCount();
-                int pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
+                if(dy > 0){
+                    int visibleItemCount = layoutManager.getChildCount();
+                    int itemTotalCount = layoutManager.getItemCount();
+                    int pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
 
-                if(chargeable){
-                    if((visibleItemCount + pastVisibleItems) >= itemTotalCount){
-                        Log.i(TAG, " Final");
-                        chargeable = false;
-                        offset += 15;
-                        obtenerDatos(offset);
+                    if(chargeable){
+                        if((visibleItemCount + pastVisibleItems) >= itemTotalCount){
+                            Log.i(TAG, " Final");
+                            chargeable = false;
+                            offset += 15;
+                            obtenerDatos(offset);
+                        }
                     }
                 }
-            }
             }
         });
         recyclerView.setAdapter(pokemonAdapter);
@@ -84,7 +83,8 @@ public class MainActivity extends AppCompatActivity {
                 chargeable = true;
                 if( response.isSuccessful() ){
                     PokemonRespuesta respuesta = response.body();
-                    ArrayList<Pokemon> listaPokemon = (ArrayList<Pokemon>) respuesta.getResults();
+                    List<Pokemon> listaPokemon = respuesta.getResults();
+                    Log.i(TAG, listaPokemon.get(0).getUrl());
                     pokemonAdapter.addListaPokemon(listaPokemon);
                 } else {
                     Log.e(TAG, " onResponse: "+response.errorBody());
