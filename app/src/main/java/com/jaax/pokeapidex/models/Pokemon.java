@@ -13,6 +13,7 @@ public class Pokemon {
         String[] arrayNumImg = imageURL.split("/");
         return arrayNumImg[ arrayNumImg.length - 1 ];
     }
+
     public String getUrl() {
         return this.imageURL;
     }
