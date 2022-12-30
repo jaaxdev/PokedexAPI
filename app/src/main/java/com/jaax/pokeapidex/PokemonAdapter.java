@@ -1,6 +1,5 @@
 package com.jaax.pokeapidex;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jaax.pokeapidex.models.Pokemon;
+import com.jaax.pokedexjava.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         Pokemon poke = listaPokemon.get(position);
         holder.nombreTxtView.setText(poke.getName());
-        holder.numberTextView.setText("#"+poke.getNumber());
+        holder.numberTextView.setText("#".concat(poke.getNumber()));
 
         Glide.with(holder.itemView.getContext())
                 .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+poke.getNumber()+".png")

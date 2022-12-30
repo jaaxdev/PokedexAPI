@@ -9,6 +9,7 @@ import android.util.Log;
 import com.jaax.pokeapidex.models.Pokemon;
 import com.jaax.pokeapidex.models.PokemonRespuesta;
 import com.jaax.pokeapidex.pokeapi.PokeapiService;
+import com.jaax.pokedexjava.R;
 
 import java.util.List;
 
